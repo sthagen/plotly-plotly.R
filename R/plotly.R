@@ -420,7 +420,8 @@ as_widget <- function(x, ...) {
     sizingPolicy = htmlwidgets::sizingPolicy(
       browser.fill = TRUE,
       defaultWidth = '100%',
-      defaultHeight = 400
+      defaultHeight = 400,
+      padding = 0
     ),
     preRenderHook = plotly_build,
     dependencies = c(
@@ -478,7 +479,7 @@ typedArrayPolyfill <- function() {
 plotlyMainBundle <- function() {
   htmltools::htmlDependency(
     name = "plotly-main", 
-    version = "1.52.2",
+    version = "1.54.1",
     package = "plotly",
     src = dependency_dir("plotlyjs"),
     script = "plotly-latest.min.js",
