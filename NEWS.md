@@ -1,10 +1,34 @@
-# 4.9.3.9000
+# 4.9.4.9000
+
+## Changes to plotly.js
+
+* This version of the R package upgrades the version of the underlying plotly.js library from v1.57.1 to v2.0.0. This includes many breaking changes, bug fixes, and improvements to the underlying JavaScript library. The [plotly.js release page](https://github.com/plotly/plotly.js/releases) has the full list of changes.
+
+## Breaking changes
+
+* `ggplotly()` now uses the `layout.legend.title` (instead of `layout.annotations`) plotly.js API to convert guides for discrete scales. (#1961)
+
+## New Features
+
+* Added new `kaleido()` function for static image exporting via the [kaleido python package](https://github.com/plotly/Kaleido). See `help(kaleido, package = "plotly")` for installation info and example usage. (#1971)
+
+## Improvements
+
+* `ggplotly()` now better positions axis titles for `facet_wrap()`/`facet_grid()`. (#1975)
+
+# 4.9.4.1
+
+## BUG FIXES
+
+* Fixes a bug in `ggplotly()` with `{crosstalk}` and `{ggplot2}` v3.3.4  (#1952).
+
+# 4.9.4
 
 ## BUG FIXES
 
 * Duplicate `highlight(selectize=T)` dropdowns are no longer rendered in Shiny (#1936).
 * `group_by.plotly()` now properly retains crosstalk information across `{dplyr}` versions (#1920).
-* Adds fixes in `ggplotly()` for the upcoming `{ggplot2}` >3.3.3 release (#1952).
+* Adds fixes in `ggplotly()` for the upcoming `{ggplot2}` v3.3.4 release (#1952).
 * Fixes some issues with `name` and `frames` when both attributes are specified. (#1903 and #1618).
 
 # 4.9.3
@@ -93,7 +117,7 @@ This is minor patch release with a few minor bug fixes and updates test expectat
 
 ## NEW FEATURES & IMPROVEMENTS
 
-* Several new features and improvements related to accessing plotly.js events in shiny (learn more about them in this RStudio [webinar](https://rstudio.com/resources/webinars/accessing-and-responding-to-plotly-events-in-shiny/)):
+* Several new features and improvements related to accessing plotly.js events in shiny (learn more about them in this RStudio [webinar](https://www.rstudio.com/resources/webinars/accessing-and-responding-to-plotly-events-in-shiny/)):
     * The `event` argument of the `event_data()` function now supports the following events: `plotly_selecting`, `plotly_brushed`, `plotly_brushing`, `plotly_restyle`, `plotly_legendclick`, `plotly_legenddoubleclick`, `plotly_clickannotation`, `plotly_afterplot`, `plotly_doubleclick`, `plotly_deselect`, `plotly_unhover`. For examples, see `plotly_example("shiny", "event_data")`, `plotly_example("shiny", "event_data_legends")`, and  `plotly_example("shiny", "event_data_annotation")`, 
     * New `event_register()` and `event_unregister()` functions for declaring which events to transmit over the wire (i.e., from the browser to the shiny server). Events that are likely to have large overhead are not registered by default, so you'll need to register these: `plotly_selecting`, `plotly_unhover`, `plotly_restyle`, `plotly_legendclick`, and `plotly_legenddoubleclick`.
     * A new `priority` argument. By setting `priority='event'`, the `event` is treated like a true event: any reactive expression using the `event` becomes invalidated (regardless of whether the input values has changed). For an example, see `plotly_example("shiny", "event_priority")`.
