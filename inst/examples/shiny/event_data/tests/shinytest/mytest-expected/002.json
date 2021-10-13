@@ -17,6 +17,7 @@
     "plotly_afterplot-A": "\"plot\"",
     "plotly_click-A": "[{\"curveNumber\":0,\"pointNumber\":7,\"x\":24.4,\"y\":3.19,\"customdata\":\"Merc 240D\"}]",
     "plotly_hover-A": null,
+    "plotly_relayout-A": "{\"width\":962,\"height\":400}",
     "plotType": "ggplotly"
   },
   "output": {
@@ -365,6 +366,10 @@
         },
         "config": {
           "doubleClick": "reset",
+          "modeBarButtonsToAdd": [
+            "hoverclosest",
+            "hovercompare"
+          ],
           "showSendToCloud": false
         },
         "source": "A",
@@ -456,9 +461,9 @@
         },
         {
           "name": "plotly-htmlwidgets-css",
-          "version": "2.0.0",
+          "version": "2.5.1",
           "src": {
-            "href": "plotly-htmlwidgets-css-2.0.0"
+            "href": "plotly-htmlwidgets-css-2.5.1"
           },
           "meta": null,
           "script": null,
@@ -469,9 +474,9 @@
         },
         {
           "name": "plotly-main",
-          "version": "2.0.0",
+          "version": "2.5.1",
           "src": {
-            "href": "plotly-main-2.0.0"
+            "href": "plotly-main-2.5.1"
           },
           "meta": null,
           "script": "plotly-latest.min.js",

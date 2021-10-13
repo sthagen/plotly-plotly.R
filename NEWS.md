@@ -1,16 +1,17 @@
-# 4.9.4.9000
+# 4.10.0
 
-## Changes to plotly.js
+## Breaking changes in JavaScript API
 
-* This version of the R package upgrades the version of the underlying plotly.js library from v1.57.1 to v2.0.0. This includes many breaking changes, bug fixes, and improvements to the underlying JavaScript library. The [plotly.js release page](https://github.com/plotly/plotly.js/releases) has the full list of changes.
+* This version of the R package upgrades the version of the underlying plotly.js library from v1.57.1 to v2.5.1. This includes many breaking changes, bug fixes, and improvements to the underlying JavaScript library. Most of the breaking changes are summarized in [this announcement of the 2.0 release](https://community.plotly.com/t/announcing-plotly-js-2-0/53675), but [see here](https://github.com/plotly/plotly.js/blob/HEAD/CHANGELOG.md) for the full changelog.
 
-## Breaking changes
+## Breaking changes in R API
 
 * `ggplotly()` now uses the `layout.legend.title` (instead of `layout.annotations`) plotly.js API to convert guides for discrete scales. (#1961)
+* `renderPlotly()` now uses `Plotly.react()` (instead of `Plotly.newPlot()`) to redraw when `layout(transition = )` is specified. This makes it possible/easier to implement a smooth transitions when `renderPlotly()` gets re-executed. (#2001)
 
 ## New Features
 
-* Added new `kaleido()` function for static image exporting via the [kaleido python package](https://github.com/plotly/Kaleido). See `help(kaleido, package = "plotly")` for installation info and example usage. (#1971)
+* Added new functions for static image exporting via the [kaleido python package](https://github.com/plotly/Kaleido), namely `save_image()` and `kaleido()`. See `help(save_image, package = "plotly")` for installation info and example usage. (#1971)
 
 ## Improvements
 
@@ -47,7 +48,7 @@
 
 * All HTTP requests are now retried upon failure (#1656, @jameslamb).
 
-* R linebreaks (`\n`) in _factor labels_ are now translated to HTML linebreaks (`<br />`), too. Before, this conversion was only done for colums of type character. ([#1700](https://github.com/ropensci/plotly/pull/1700), @salim-b).
+* R linebreaks (`\n`) in _factor labels_ are now translated to HTML linebreaks (`<br />`), too. Before, this conversion was only done for colums of type character. ([#1700](https://github.com/plotly/plotly.R/pull/1700), @salim-b).
 
 ## BUG FIXES
 
@@ -181,7 +182,7 @@ This is minor patch release with a few minor bug fixes and updates test expectat
 
 ### Other improvements relevant for all **plotly** objects
 
-* LaTeX rendering via MathJax is now supported and the new `TeX()` function may be used to flag a character vector as LaTeX (#375). Use the new `mathjax` argument in `config()` to specify either external (`mathjax="cdn"`) or local (`mathjax="local"`) MathJaX. If `"cdn"`, mathjax is loaded externally (meaning an internet connection is needed for TeX rendering). If `"local"`, the PLOTLY_MATHJAX_PATH environment variable must be set to the location (a local file path) of MathJax. IMPORTANT: **plotly** uses SVG-based mathjax rendering which doesn't play nicely with HTML-based rendering (e.g., **rmarkdown** documents and **shiny** apps). To leverage both types of rendering, you must `<iframe>` your plotly graph(s) into the larger document (see [here](https://github.com/ropensci/plotly/blob/master/inst/examples/rmd/MathJax/index.Rmd) for an **rmarkdown** example  and [here](https://github.com/ropensci/plotly/blob/master/inst/examples/rmd/MathJax/index.Rmd) for a **shiny** example).
+* LaTeX rendering via MathJax is now supported and the new `TeX()` function may be used to flag a character vector as LaTeX (#375). Use the new `mathjax` argument in `config()` to specify either external (`mathjax="cdn"`) or local (`mathjax="local"`) MathJaX. If `"cdn"`, mathjax is loaded externally (meaning an internet connection is needed for TeX rendering). If `"local"`, the PLOTLY_MATHJAX_PATH environment variable must be set to the location (a local file path) of MathJax. IMPORTANT: **plotly** uses SVG-based mathjax rendering which doesn't play nicely with HTML-based rendering (e.g., **rmarkdown** documents and **shiny** apps). To leverage both types of rendering, you must `<iframe>` your plotly graph(s) into the larger document (see [here](https://github.com/plotly/plotly.R/blob/master/inst/examples/rmd/MathJax/index.Rmd) for an **rmarkdown** example  and [here](https://github.com/plotly/plotly.R/blob/master/inst/examples/rmd/MathJax/index.Rmd) for a **shiny** example).
 * The selection (i.e., linked-brushing) mode can now switch from 'transient' to 'persistent' by holding the 'shift' key. It's still possible to _force_ persistent selection by setting `persistent = TRUE` in `highlight()`, but `persistent = FALSE` (the default) is now recommended since it allows one to switch between [persistent/transient selection](https://plotly-r.com/client-side-linking.html#fig:txmissing-modes) in the browser, rather than at the command line.
 * The `highlight()` function gains a `debounce` argument for throttling the rate at which `on` events may be fired. This is mainly useful for improving user experience when `highlight(on = "plotly_hover")` and mousing over relevant markers at a rapid rate (#1277)
 * The new `partial_bundle()` function makes it easy to leverage [partial bundles of plotly.js](https://github.com/plotly/plotly.js#partial-bundles) for reduced file sizes and faster render times.
@@ -452,7 +453,7 @@ limits.
 
 ## BUG FIXES
 
-* `event_data()` now works inside shiny modules (#659). For an example, see <https://github.com/ropensci/plotly/tree/master/inst/examples/shiny/event_data_modules>
+* `event_data()` now works inside shiny modules (#659). For an example, see <https://github.com/plotly/plotly.R/tree/master/inst/examples/shiny/event_data_modules>
 
 # 4.3.6 -- 9 September 2016
 

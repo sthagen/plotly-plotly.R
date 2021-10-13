@@ -20,6 +20,7 @@
     "plotly_click-A": null,
     "plotly_deselect-A": "\"plot\"",
     "plotly_hover-A": null,
+    "plotly_relayout-A": "{\"width\":962,\"height\":400}",
     "plotly_selected-A": null,
     "plotly_selecting-A": null,
     "plotType": "ggplotly"
@@ -370,6 +371,10 @@
         },
         "config": {
           "doubleClick": "reset",
+          "modeBarButtonsToAdd": [
+            "hoverclosest",
+            "hovercompare"
+          ],
           "showSendToCloud": false
         },
         "source": "A",
@@ -461,9 +466,9 @@
         },
         {
           "name": "plotly-htmlwidgets-css",
-          "version": "2.0.0",
+          "version": "2.5.1",
           "src": {
-            "href": "plotly-htmlwidgets-css-2.0.0"
+            "href": "plotly-htmlwidgets-css-2.5.1"
           },
           "meta": null,
           "script": null,
@@ -474,9 +479,9 @@
         },
         {
           "name": "plotly-main",
-          "version": "2.0.0",
+          "version": "2.5.1",
           "src": {
-            "href": "plotly-main-2.0.0"
+            "href": "plotly-main-2.5.1"
           },
           "meta": null,
           "script": "plotly-latest.min.js",

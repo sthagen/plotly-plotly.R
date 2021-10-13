@@ -19,6 +19,7 @@
     "plotly_brushing-A": "{\"x\":[23.95978500551268,25.98332414553473],\"y\":[3.0020072289156627,3.5073743975903615]}",
     "plotly_click-A": "[{\"curveNumber\":0,\"pointNumber\":7,\"x\":24.4,\"y\":3.19,\"customdata\":\"Merc 240D\"}]",
     "plotly_hover-A": null,
+    "plotly_relayout-A": "{\"width\":962,\"height\":400}",
     "plotly_selected-A": "[{\"curveNumber\":0,\"pointNumber\":7,\"x\":24.4,\"y\":3.19,\"customdata\":\"Merc 240D\"}]",
     "plotly_selecting-A": "[{\"curveNumber\":0,\"pointNumber\":7,\"x\":24.4,\"y\":3.19,\"customdata\":\"Merc 240D\"}]",
     "plotType": "ggplotly"
@@ -369,6 +370,10 @@
         },
         "config": {
           "doubleClick": "reset",
+          "modeBarButtonsToAdd": [
+            "hoverclosest",
+            "hovercompare"
+          ],
           "showSendToCloud": false
         },
         "source": "A",
@@ -460,9 +465,9 @@
         },
         {
           "name": "plotly-htmlwidgets-css",
-          "version": "2.0.0",
+          "version": "2.5.1",
           "src": {
-            "href": "plotly-htmlwidgets-css-2.0.0"
+            "href": "plotly-htmlwidgets-css-2.5.1"
           },
           "meta": null,
           "script": null,
@@ -473,9 +478,9 @@
         },
         {
           "name": "plotly-main",
-          "version": "2.0.0",
+          "version": "2.5.1",
           "src": {
-            "href": "plotly-main-2.0.0"
+            "href": "plotly-main-2.5.1"
           },
           "meta": null,
           "script": "plotly-latest.min.js",
