@@ -88,6 +88,7 @@ ggplotly.ggmatrix <- function(p = ggplot2::last_plot(), width = NULL,
                               height = NULL, tooltip = "all", dynamicTicks = FALSE, 
                               layerData = 1, originalData = TRUE, source = "A", ...) {
   dots <- list(...)
+
   # provide a sensible crosstalk if none is already provided (makes ggnostic() work at least)
   if (!crosstalk_key() %in% names(p$data)) {
     p$data[[crosstalk_key()]] <- p$data[[".rownames"]] %||% seq_len(nrow(p$data))
@@ -180,8 +181,8 @@ gg2list <- function(p, width = NULL, height = NULL,
     grDevices::png
   } else if (capabilities("jpeg")) {
     grDevices::jpeg 
-  } else if (system.file(package = "Cairo") != "") {
-    Cairo::Cairo
+  } else if (is_installed("Cairo")) {
+    function(filename, ...) Cairo::Cairo(file = filename, ...)
   } else {
     stop(
       "No Cairo or bitmap device is available. Such a graphics device is required to convert sizes correctly in ggplotly().\n\n", 
@@ -197,7 +198,7 @@ gg2list <- function(p, width = NULL, height = NULL,
     height <- height %||% default(grDevices::dev.size("px")[2])
   }
   # open the device and make sure it closes on exit
-  dev_fun(file = tempfile(), width = width %||% 640, height = height %||% 480)
+  dev_fun(filename = tempfile(), width = width %||% 640, height = height %||% 480)
   on.exit(grDevices::dev.off(), add = TRUE)
   
   # check the value of dynamicTicks
@@ -242,7 +243,7 @@ gg2list <- function(p, width = NULL, height = NULL,
     # currently, LayerSf is the only core-ggplot2 Layer that makes use
     # of it https://github.com/tidyverse/ggplot2/pull/2875#issuecomment-438708426
     data <- layer_data
-    if (packageVersion("ggplot2") > "3.1.0") {
+    if (get_package_version("ggplot2") > "3.1.0") {
       data <- by_layer(function(l, d) if (is.function(l$setup_layer)) l$setup_layer(d, plot) else d)
     }
     
@@ -422,6 +423,11 @@ gg2list <- function(p, width = NULL, height = NULL,
       x <- reComputeGroup(x, z)
       # dplyr issue??? https://github.com/tidyverse/dplyr/issues/2701
       attr(y$group, "n") <- NULL
+      # https://github.com/plotly/plotly.R/issues/2013
+      if (!identical(class(x$group), class(y$group))) {
+        x$group <- as.character(x$group)
+        y$group <- as.character(y$group)
+      }
       suppressMessages(dplyr::left_join(x, y))
     }, data, nestedKeys, layers)
     
@@ -1384,10 +1390,13 @@ gdef2trace <- function(gdef, theme, gglayout) {
     rng <- range(gdef$bar$value)
     gdef$bar$value <- scales::rescale(gdef$bar$value, from = rng)
     gdef$key$.value <- scales::rescale(gdef$key$.value, from = rng)
+    vals <- lapply(gglayout[c("xaxis", "yaxis")], function(ax) {
+      if (identical(ax$tickmode, "auto")) ax$ticktext else ax$tickvals
+    })
     list(
-      x = with(gglayout$xaxis, if (identical(tickmode, "auto")) ticktext else tickvals)[[1]],
-      y = with(gglayout$yaxis, if (identical(tickmode, "auto")) ticktext else tickvals)[[1]],
-      # esentially to prevent this getting merged at a later point
+      x = vals[[1]][[1]],
+      y = vals[[2]][[1]],
+      # essentially to prevent this getting merged at a later point
       name = gdef$hash,
       type = "scatter",
       mode = "markers",

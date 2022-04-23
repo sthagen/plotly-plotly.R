@@ -1,3 +1,25 @@
+# 4.10.0.9000
+
+## Changes to plotly.js
+
+* This version of the R package upgrades the version of the underlying plotly.js library from v2.5.1 to v2.11.1. This includes many bug fixes and improvements. The [plotly.js release page](https://github.com/plotly/plotly.js/releases) has the full list of changes.
+
+## New features
+
+* `ggplotly()` now supports the `{ggalluvial}` package. (#2061, thanks @moutikabdessabour)
+* `highlight()` now supports `on="plotly_selecting"`, enabling client-side linked brushing via mouse click+drag (no mouse-up event required, as with `on="plotly_selected"`). (#1280)
+
+## Bug fixes
+
+* `ggplotly()` now converts `stat_ecdf()` properly. (#2065)
+* `ggplotly()` now correctly handles `geom_tile()` with no `fill` aesthetic. (#2063)
+* `ggplotly()` now respects `guide(aes = "none")` (e.g., `guide(fill = "none")`) when constructing legend entries. (#2067)
+* Fixed an issue with translating `GGally::ggcorr()` via `ggplotly()`. (#2012)
+
+## Improvements
+
+* `ggplotly()` does not issue warnings with `options(warnPartialMatchArgs = TRUE)` any longer. (#2046, thanks @bersbersbers)
+
 # 4.10.0
 
 ## Breaking changes in JavaScript API

@@ -23,8 +23,11 @@ layers2traces <- function(data, prestats_data, layout, p) {
     # turn symbol (e.g., ..count..) & call (e.g. calc(count)) mappings into text labels 
     map <- ggfun("make_labels")(map)
 
+
     # filter tooltip aesthetics down to those specified in `tooltip` arg 
     if (!identical(p$tooltip, "all")) {
+      # rectify tooltips, ggplot automatically convert `color` => `colour`
+      p$tooltip[p$tooltip == "color"] <- "colour"
       map <- map[names(map) %in% p$tooltip | map %in% p$tooltip]
     }
     
@@ -99,12 +102,16 @@ layers2traces <- function(data, prestats_data, layout, p) {
   }
   # now to the actual layer -> trace conversion
   trace.list <- list()
+  aes_no_guide <- names(vapply(p$guides, identical, logical(1), "none"))
   for (i in seq_along(datz)) {
     d <- datz[[i]]
     # variables that produce multiple traces and deserve their own legend entries
-    split_legend <- paste0(names(discreteScales), "_plotlyDomain")
+    split_legend <- paste0(
+      setdiff(names(discreteScales), aes_no_guide), 
+      "_plotlyDomain"
+    )
     # add variable that produce multiple traces, but do _not_ deserve entries
-    split_by <- c(split_legend, "PANEL", "frame", split_on(d))
+    split_by <- c(split_legend, aes_no_guide, "PANEL", "frame", split_on(d))
     # ensure the factor level orders (which determines traces order)
     # matches the order of the domain values
     split_vars <- intersect(split_by, names(d))
@@ -168,6 +175,12 @@ layers2traces <- function(data, prestats_data, layout, p) {
 #' @export
 to_basic <- function(data, prestats_data, layout, params, p, ...) {
   UseMethod("to_basic")
+}
+
+#' @export 
+to_basic.GeomFunction <- function (data, prestats_data, layout, params, p, ...) {
+   data$y <- params$fun(data$x)
+   prefix_class(data, "GeomPath")
 }
 
 #' @export
@@ -243,6 +256,7 @@ to_basic.GeomLine <- function(data, prestats_data, layout, params, p, ...) {
 
 #' @export
 to_basic.GeomStep <- function(data, prestats_data, layout, params, p, ...) {
+  data <- data[order(data[["x"]]), ]
   prefix_class(data, "GeomPath")
 }
 
@@ -358,7 +372,7 @@ to_basic.GeomRasterAnn <- function(data, prestats_data, layout, params, p, ...) 
 #' @export
 to_basic.GeomTile <- function(data, prestats_data, layout, params, p, ...) {
   # geom2trace.GeomTile is a heatmap, which requires continuous fill
-  if (is.discrete(prestats_data$fill)) {
+  if (is.discrete(data$fill_plotlyDomain %||% NA_character_)) {
     data <- prefix_class(data, "GeomRect")
     to_basic(data, prestats_data, layout, params, p)
   } else {
@@ -611,6 +625,35 @@ to_basic.GeomQuantile <- function(data, prestats_data, layout, params, p, ...){
   dat <- split(data, data$quantile)
   dat <- lapply(dat, prefix_class, y = "GeomPath")
   dat
+}
+
+# ggalluvial::GeomStratum
+#' @export
+to_basic.GeomStratum <- function(data, ...) {
+  to_basic.GeomRect(data, ...)
+}
+
+# ggalluvial::GeomAlluvium
+#' @export 
+to_basic.GeomAlluvium <- function(data, ...) {
+  # geom_alluvium by default generates a data.frame with a colour column and sets it to 0, which leads to an error when trying to get the colour from the number and grid::col2rgb complains that colors must be positive integers.
+  cols <- unique(data$colour)
+  if (length(cols) == 1 && cols[1] == 0) {
+    data$colour <- NULL
+  }
+  
+  data <- data[order(data$x), ]
+  row_number <- nrow(data)
+  data_rev <- data[rev(seq_len(row_number)), ]
+  unused_aes <- setdiff(names(data), c("x", "y", "ymin", "ymax"))
+  
+  d <- structure(rbind(
+    cbind(x = data$x, y = data$ymin, data[unused_aes]),
+    cbind(x = data$x[row_number], y = data$ymin[row_number], data[row_number, unused_aes]),
+    cbind(x = data_rev$x, y = data_rev$ymax, data_rev[unused_aes])
+  ), class = class(data))
+  
+  prefix_class(d, "GeomPolygon") 
 }
 
 #' @export
