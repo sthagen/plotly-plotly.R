@@ -1,5 +1,7 @@
 # plotly (development version)
 
+# 4.10.4
+
 ## Improvements
 
 * `ggplotly()` now works better with the development version of ggplot2 (> v3.4.4). (#2315)
