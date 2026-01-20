@@ -1,5 +1,24 @@
 # plotly (development version)
 
+## Changes to plotly.js
+
+Upgrades plotly.js from v2.11.1 to v2.25.2 (35 releases). Key new features now available:
+
+* **Multiple legends**: Support for `legend2`, `legend3`, etc. with separate positioning and visibility control
+* **Shape labels**: New `label` attribute for shapes and `label.texttemplate` for parametric shapes
+* **Marker direction**: New `marker.angle`, `marker.angleref`, and `marker.standoff` properties for directional markers
+* **Y-axis positioning**: `shift` and `autoshift` properties to avoid y-axis overlapping in multi-axis plots
+* **Mapbox clustering**: Clustering options and bounds support for `scattermapbox` traces
+* **Equal Earth projection**: New map projection option for geo subplots
+* **Pattern fills**: Pattern support extended to pie, funnelarea, sunburst, icicle, and treemap charts
+* **Editable selections**: Persistent and editable selections over cartesian subplots with `editSelection` config option
+* **Axis label aliases**: `labelalias` for simplified axis label customization
+* **Grid styling**: `griddash` property and minor tick/grid line styling options
+
+Also includes a security fix for prototype pollution and ~90KB bundle size reduction.
+
+See the [plotly.js releases page](https://github.com/plotly/plotly.js/releases) for the full changelog.
+
 ## Improvements
 
 * `save_image()` now works with kaleido v1.0 and higher. (#2447)
@@ -7,6 +26,13 @@
 ## Bug fixes
 
 * `plotly_build()` now works with `ggmatrix` objects (e.g., from `GGally::ggpairs()`). (#2447)
+* Closed #2415: `ggplotly()` now shows variables named 'group' in tooltips when mapped to aesthetics like `colour`.
+* Closed #2455, #2460: `ggplotly()` no longer creates empty shapes when `panel.border` is `element_blank()` (ggplot2 4.0.0 compatibility).
+* Closed #2466: `ggplotly()` no longer errors when `scale_*_manual()` has unused aesthetics (e.g., `aesthetics = c("colour", "fill")` when only colour is used).
+* Closed #2305: `ggplotly()` now respects `geom_boxplot(outlier.shape = NA)` to hide outlier points.
+* Closed #2467: `ggplotly()` now correctly shows legends and splits traces when scales have multiple aesthetics.
+* Closed #2407, #2187: `ggplotly()` now translates `legend.position` theme element to plotly layout (supports "bottom", "top", "left", and numeric positions).
+* Closed #2281: `ggplotly()` no longer drops legends when `geom_blank()` is present in the plot.
 
 # plotly 4.11.0
 
