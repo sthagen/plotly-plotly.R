@@ -97,7 +97,8 @@ kaleido <- function(...) {
     }
   )
   
-  res <- if (is.null(tryNULL(kaleido$scopes))) {
+  # Check for kaleido v1 by looking for v1-specific function
+  res <- if (reticulate::py_has_attr(kaleido, "write_fig_sync")) {
     newKaleidoScope(kaleido)
   } else {
     legacyKaleidoScope(kaleido)
@@ -108,6 +109,7 @@ kaleido <- function(...) {
 }
 
 newKaleidoScope <- function(kaleido) {
+  force(kaleido)
   list(
     scopes = NULL,
     transform = function(p, file, ..., width = NULL, height = NULL, scale = NULL) {
